@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+
+	<!-- misc -->
+		<classpath name="src" />
+
+	<!-- Android -->
+
+		<!-- Estat Users
+       	<echo value='|----------------------------------------------------------------------------|' if="android"/>
+		<echo value='|                             /!\ [HypVideo - eStat] /!\                     |' if="android"/>
+		<echo value='|----------------------------------------------------------------------------|' if="android"/>
+		<echo value='| Add permissions: INTERNET, ACCESS_NETWORK_STATE, READ_PHONE_STATE          |' if="android"/>
+		<echo value="|----------------------------------------------------------------------------|" if="android"/>
+		<template path="/templates/android/template/libs/MediametrieEstatTagsAndroid.jar" rename="libs/MediametrieEstatTagsAndroid.jar" if="android"/>
+		-->
+
+        <java path="project/android" if="android" />
+		<ndll name="hypmedias" if="android"/>
+
+        <template
+        	path="/templates/android/template/res/layout/fr_hyperfiction_hypmedias_hypvideo.xml"
+        	rename="res/layout/fr_hyperfiction_hypmedias_hypvideo.xml"
+        	if="android"
+        />
+
+	<!-- iOS -->
+		<ndll name="hypmedias" if="ios"/>
+		<dependency name="MediaPlayer.framework" if="ios" />
+
+</project>
