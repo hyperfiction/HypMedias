@@ -5,7 +5,7 @@
 		<classpath name="src" />
 	<!-- android -->
 	        <java path="project/android" if="android" />
-			<ndll name="hypmedias" if="android"/>
+		<ndll name="hypmedias" if="android"/>
 	
 	        <template
 	        	path="/templates/android/template/res/layout/fr_hyperfiction_hypmedias_hypvideo.xml"
