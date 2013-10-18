@@ -53,6 +53,20 @@ public class HypVideoActivity extends Activity implements OnPreparedListener , O
 	// -------o public
 
 		/**
+		*
+		*
+		* @public
+		* @return	void
+		*/
+		@Override
+		public void onPause( ){
+			super.onPause( );
+			trace("onPause");
+			if( oVideo_player != null )
+				oVideo_player.pause( );
+		}
+
+		/**
 		* Called when the Activity is created
 		*
 		* @public
@@ -121,7 +135,7 @@ public class HypVideoActivity extends Activity implements OnPreparedListener , O
 		}
 
 		/**
-		*
+		* Show / Hide the loader if the video is buffering or not
 		*
 		* @public
 		* @return	void
@@ -169,7 +183,7 @@ public class HypVideoActivity extends Activity implements OnPreparedListener , O
 		//Play / Pause listener -------------------------------------------------------------------------------
 
 		/**
-		*
+		* Sending the seek event to Haxe
 		*
 		* @public
 		* @return	void
@@ -179,7 +193,7 @@ public class HypVideoActivity extends Activity implements OnPreparedListener , O
 		}
 
 		/**
-		*
+		* When the video is played, sending the event to Haxe
 		*
 		* @public
 		* @return	void
@@ -189,7 +203,7 @@ public class HypVideoActivity extends Activity implements OnPreparedListener , O
 		}
 
 		/**
-		*
+		* When the video is paused, sending the event to Haxe
 		*
 		* @public
 		* @return	void
@@ -199,13 +213,30 @@ public class HypVideoActivity extends Activity implements OnPreparedListener , O
 		}
 
 		/**
-		*
+		* Whe nthe PLayback STOP
 		*
 		* @public
 		* @return	void
 		*/
 		public void onPlayback_stop( ){
 			_sendStatus( PLAYBACK_STOP , "" );
+		}
+
+		/**
+		* When the button BACK is press while playback
+		*
+		* @private
+		* @return	void
+		*/
+		@Override
+		public void onBackPressed( ){
+			trace("onBackPressed");
+
+			//Sending the playback complete event
+				_sendStatus( PLAYBACK_COMPLETE , "" );
+
+			//Calling super method
+				super.onBackPressed( );
 		}
 
 	// -------o protected
