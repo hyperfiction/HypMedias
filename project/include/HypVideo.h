@@ -3,7 +3,7 @@
 
 namespace hypvideo{
 
-	void play_remote( const char *sURL, int orientation );
+	void playRemote( const char *sURL );
 	void dispose( );
 
 }

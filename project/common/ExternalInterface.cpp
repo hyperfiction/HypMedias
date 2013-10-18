@@ -14,13 +14,11 @@
 #endif
 
 
-using namespace hypvideo;
-
 AutoGCRoot *eval_HypVideo_onEvent = 0;
 
 extern "C"{
 
-	int HypVideo_register_prims(){
+	int hypmedias_register_prims(){
 		printf("HypVideo: register_prims()\n");
 		return 0;
 	}
@@ -31,27 +29,20 @@ extern "C"{
 					alloc_string( sEvent ) ,
 					alloc_string( sArg )
 				);
-
 	}
 }
 
-#ifdef IPHONE
+// iOS ------------------------------------------------------------------------------------------------------
 
-	static value HypVideo_play_remote( value sUrl, value orientation ){
-		printf("HypVideo_play_remote");
-		play_remote( val_string( sUrl ), val_int( orientation ) );
-		return alloc_null( );
-	}
-	DEFINE_PRIM( HypVideo_play_remote , 2 );
+	#ifdef IPHONE
 
-	static value HypVideo_dispose( ){
-		printf("HypVideo_dispose");
-		dispose( );
-		return alloc_null( );
-	}
-	DEFINE_PRIM( HypVideo_dispose , 0 );
+		static value HypVideo_playRemote( value sUrl ){
+			hypvideo::playRemote( val_string( sUrl ) );
+			return alloc_null( );
+		}
+		DEFINE_PRIM( HypVideo_playRemote , 1 );
 
-#endif
+	#endif
 
 // Callbacks ------------------------------------------------------------------------------------------------------
 
@@ -63,7 +54,9 @@ extern "C"{
 	DEFINE_PRIM( HypVideo_set_event_callback , 1 );
 
 // Android ------------------------------------------------------------------------------------------------------
+
 	#ifdef ANDROID
+
 		extern "C"{
 			JNIEXPORT void JNICALL Java_fr_hyperfiction_hypmedias_HypVideo_onVideoStatus(
 				                   													JNIEnv * env ,
@@ -82,4 +75,5 @@ extern "C"{
 				}
 			}
 		}
+
 	#endif

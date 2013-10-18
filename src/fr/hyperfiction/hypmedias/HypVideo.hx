@@ -107,6 +107,9 @@ class HypVideo extends EventDispatcher{
 		#if android
 		@JNI("fr.hyperfiction.hypmedias.HypVideo","playRemote")
 		#end
+		#if ios
+		@CPP("hypmedias","HypVideo_playRemote")
+		#end
 		static private function _playRemote( s : String ) : Void{
 		}
 

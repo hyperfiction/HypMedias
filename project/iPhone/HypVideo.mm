@@ -10,186 +10,204 @@
     typedef void( *FunctionType)( );
     extern "C"{
         void HypVideo_dispatch_event( const char *sEvent , const char *sArg );
+        static const char* const PLAYBACK_COMPLETE  = "HypVideoEvent_PLAYBACK_COMPLETE";
+        static const char* const PLAYBACK_ERROR     = "HypVideoEvent_PLAYBACK_ERROR";
+        static const char* const PLAYBACK_INFO      = "HypVideoEvent_PLAYBACK_INFO";
+        static const char* const PLAYBACK_PAUSE     = "HypVideoEvent_PLAYBACK_PAUSE";
+        static const char* const PLAYBACK_PLAY      = "HypVideoEvent_PLAYBACK_PLAY";
+        static const char* const PLAYBACK_SEEK      = "HypVideoEvent_PLAYBACK_SEEK";
+        static const char* const PLAYBACK_STOP      = "HypVideoEvent_PLAYBACK_STOP";
     }
 
 //Interface
-    @interface MovieLayer : UIViewController<UIGestureRecognizerDelegate>{
+    @interface HypVideo : UIViewController<UIGestureRecognizerDelegate>{
         IBOutlet MPMoviePlayerViewController *videoPlayer;
     }
-        @property(nonatomic,retain)IBOutlet MPMoviePlayerViewController *videoPlayer;
-        @property(nonatomic,retain)NSTimer *pollPlayerTimer;
-        @property int orientation;
+        +(HypVideo *) getInstance;
+        -(void) playRemote_video:(NSString*)nsVideo_path;
+        @property(nonatomic,strong)IBOutlet MPMoviePlayerViewController *videoPlayer;
+
     @end
 
 //Implementation
 
-    @implementation MovieLayer
+    @implementation HypVideo
+
+
 
         @synthesize videoPlayer;
-        @synthesize pollPlayerTimer;
-        @synthesize orientation;
 
-        -(id) init {
-            self = [ super init ];
+        /**
+        * Return the singleton instance of the class
+        *
+        * @public
+        * @return    instance ( HypVideo )
+        */
+        +(HypVideo *) getInstance{
+            static HypVideo *instance;
+            @synchronized( self ){
+
+                if( !instance ){
+                    instance = [[HypVideo alloc] init];
+                    NSLog(@"create instance");
+                }
+
+                return instance;
+            }
+        }
+
+        /**
+        * Class intitialization
+        *
+        * @public
+        * @return    void
+        */
+        -(id ) init{
+            if( self == [super init]){
+                NSLog(@"init");
+            }
             return self;
         }
 
-        -(void) dealloc {
-            [self close];
+        /**
+        * Deallocation
+        *
+        * @public
+        * @return    void
+        */
+        -( void ) dealloc{
+            if( self.videoPlayer != nil )
+                [self.videoPlayer dealloc];
+
             [super dealloc];
         }
 
-        -(void) close{
-            NSLog(@"HypVideo ::: close");
-            [self endPlayerPolling];
-             [[[[UIApplication sharedApplication] keyWindow] rootViewController] dismissMoviePlayerViewControllerAnimated];
-            //[videoPlayer stop];
-            //[videoPlayer.view removeFromSuperview];
-        }
+        /**
+        * Play a remote video by it's path
+        *
+        * @public
+        * @return    void
+        */
+        -(void) playRemote_video:(NSString*)nsVideo_path{
+            NSLog(@"playRemote_video");
+            //Path to URL
+                NSURL *nsVideoURL = [NSURL URLWithString:nsVideo_path];
 
-        -(void) open:(NSString*)NSVideoPath{
+            //The video player
+                self.videoPlayer = [MPMoviePlayerViewController alloc];
+                [self.videoPlayer initWithContentURL:nsVideoURL];
 
-             NSURL*NSVideoURL=[NSURL URLWithString:NSVideoPath];
-            self.videoPlayer =  [[MPMoviePlayerViewController alloc] initWithContentURL:NSVideoURL];
-            [[[[UIApplication sharedApplication] keyWindow] rootViewController] presentMoviePlayerViewControllerAnimated:videoPlayer];
-            //[[[UIApplication sharedApplication] keyWindow] setRootViewController:self];
-            /*[[[[UIApplication sharedApplication] keyWindow] rootViewController] presentMoviePlayerViewControllerAnimated:
+            //Listeners
+                 [[NSNotificationCenter defaultCenter] addObserver:self
+                                                          selector:@selector(playbackFinished:)
+                                                              name:MPMoviePlayerPlaybackDidFinishNotification
+                                                            object:self.videoPlayer.moviePlayer];
+
+                 [[NSNotificationCenter defaultCenter] addObserver:self
+                                                          selector:@selector(onPlayback_state_changed:)
+                                                              name:MPMoviePlayerPlaybackStateDidChangeNotification
+                                                            object:self.videoPlayer.moviePlayer];
+                 NSLog(@"listeners ok");
             //
-                UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
-                tapGestureRecognizer.delegate = self;
+                [[[[UIApplication sharedApplication] keyWindow] rootViewController] presentMoviePlayerViewControllerAnimated:self.videoPlayer];
 
-            //
-                NSLog( @"open >> " );
-
-
-            //
-                if( videoPlayer == nil )
-                    videoPlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:NSVideoURL ];
-                    videoPlayer.shouldAutoplay = YES;
-                    videoPlayer.backgroundView.hidden = NO;
-                    videoPlayer.controlStyle = MPMovieControlStyleEmbedded;//MPMovieControlStyleEmbedded;
-
-             //
-                [videoPlayer.view addGestureRecognizer:tapGestureRecognizer];
-                //[videoPlayer setScalingMode:MPMovieScalingModeFill];
-
-            //
-
-
-            //
-                [[[UIApplication sharedApplication] keyWindow] addSubview:videoPlayer.view];
-                [videoPlayer setFullscreen:YES animated:NO];
-            */
-                 [[NSNotificationCenter defaultCenter]   addObserver:self
-                                                        selector:@selector(moviePlayBackDidFinish:)
-                                                        name:MPMoviePlayerPlaybackDidFinishNotification
-                                                        object:videoPlayer.moviePlayer];
-                [self beginPlayerPolling];
-
-               // [[[[UIApplication sharedApplication] keyWindow] rootViewController] presentMoviePlayerViewControllerAnimated:player];
-        }
-
-        - (void) moviePlayBackDidFinish:(NSNotification*)notification {
-            NSString *str = [[[notification userInfo] valueForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] stringValue];
-            NSLog(@"moviePlayBackDidFinish >> %@",str);
-            [self close];
-            HypVideo_dispatch_event( "onComplete" , [str UTF8String] );
-        }
-
-        - (void) beginPlayerPolling {
-            pollPlayerTimer = [NSTimer scheduledTimerWithTimeInterval:0.01
-                                            target:self
-                                            selector:@selector(PollPlayerTimer_tick:)
-                                            userInfo:nil
-                                            repeats:YES];
+            //Autoplay
+                [self.videoPlayer.moviePlayer prepareToPlay];
+                [self.videoPlayer.moviePlayer play];
 
         }
 
-        - (void) PollPlayerTimer_tick:(NSObject *)sender {
-            //NSLog(@"PollPlayerTimer_tick %o",videoPlayer.moviePlayer.playbackState);
-            if (videoPlayer.moviePlayer.playbackState == MPMoviePlaybackStatePlaying) {
-                HypVideo_dispatch_event( "onPositionChanged", [[NSString stringWithFormat:@"%f",videoPlayer.moviePlayer.currentPlaybackTime*1000] UTF8String] );
-            }
+        - (void) removeListeners{
+            if( self.videoPlayer != nil ){
+                [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                                name:MPMoviePlayerPlaybackDidFinishNotification
+                                                              object:self.videoPlayer.moviePlayer];
 
-        }
-
-        - (void) endPlayerPolling {
-            if (pollPlayerTimer != nil) {
-                [pollPlayerTimer invalidate];
-                pollPlayerTimer = nil;
+                [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                                name:MPMoviePlayerPlaybackStateDidChangeNotification
+                                                              object:self.videoPlayer.moviePlayer];
             }
         }
 
-        //iOS 6
+        /**
+        * Playback's done
+        *
+        * @public
+        * @return    void
+        */
+         - (void) playbackFinished:(NSNotification*)notification {
+            NSLog(@"playbackFinished");
+            //Reason
+                NSNumber *resultValue = [[notification userInfo] objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey];
+                MPMovieFinishReason reason = [resultValue intValue];
+                if (reason == MPMovieFinishReasonPlaybackError){
 
-        -(BOOL)shouldAutorotate{
-            NSLog(@"shouldAutorotate");
-            return YES;
+                    //There is an error ?
+                        NSError *mediaPlayerError = [[notification userInfo] objectForKey:@"error"];
+
+                    //If a knowed error
+                        if (mediaPlayerError)
+                            HypVideo_dispatch_event( PLAYBACK_ERROR, [[mediaPlayerError localizedDescription] UTF8String]);
+                        else
+                            HypVideo_dispatch_event( PLAYBACK_ERROR , "" );
+                }else{
+                    //Playback completed
+                        HypVideo_dispatch_event( PLAYBACK_COMPLETE , "" );
+                }
+
+            //Cleaning
+                [[[[UIApplication sharedApplication] keyWindow] rootViewController] dismissMoviePlayerViewControllerAnimated];
+                [self removeListeners];
+                //if( self.videoPlayer != nil )
+                //  [self.videoPlayer release];
+
         }
 
-        -(NSInteger)supportedInterfaceOrientations{
-            NSLog(@"supportedInterfaceOrientations");
-            if( orientation == 1 ) {
-                return UIInterfaceOrientationMaskLandscape;
-            } else if ( orientation == 2 ){
-                return UIInterfaceOrientationMaskPortrait;
+        /**
+        * Playback state changed
+        *
+        * @public
+        * @return    void
+        */
+        - (void) onPlayback_state_changed:(NSNotification *)notification{
+            NSLog(@"onPlayback_state_changed");
+            switch( self.videoPlayer.moviePlayer.playbackState ){
+
+                case MPMoviePlaybackStatePlaying:
+                    HypVideo_dispatch_event( PLAYBACK_PLAY , "" );
+                    break;
+
+                case MPMoviePlaybackStatePaused:
+                    HypVideo_dispatch_event( PLAYBACK_PAUSE , "" );
+                    break;
+
+                case MPMoviePlaybackStateStopped:
+                case MPMoviePlaybackStateInterrupted:
+                    HypVideo_dispatch_event( PLAYBACK_STOP , "" );
+                    break;
+
+                case MPMoviePlaybackStateSeekingForward:
+                case MPMoviePlaybackStateSeekingBackward:
+                    //NSLog(@"seek %f", self.videoPlayer.moviePlayer.currentPlaybackTime );
+                    HypVideo_dispatch_event( PLAYBACK_SEEK , [[NSString stringWithFormat:@"%f", self.videoPlayer.moviePlayer.currentPlaybackTime] UTF8String] );
+                    break;
             }
-            return UIInterfaceOrientationMaskLandscape
-                    || UIInterfaceOrientationMaskPortrait;
-        }
-
-        //iOS 5
-
-        - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-            if( orientation == 1) {
-                return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft
-                        || interfaceOrientation == UIInterfaceOrientationLandscapeRight);
-            } else if( orientation == 2) {
-                return (interfaceOrientation == UIInterfaceOrientationPortrait);
-            }
-            return YES;
-        }
-
-
-
-        #pragma mark - gesture delegate
-        // this allows you to dispatch touches
-        - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-            return YES;
-        }
-        // this enables you to handle multiple recognizers on single view
-        - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-            return YES;
-        }
-
-        - ( void ) handleTap : ( UITapGestureRecognizer *) recognizer {
-            NSLog(@"moviePlayBackDidFinish >> ");
         }
 
     @end
 
 namespace hypvideo{
 
-    static MovieLayer *instance;
+    static HypVideo *instance;
 
-    void play_remote( const char *sURL, int orientation ){
+    void playRemote( const char *sVideo_path ){
 
-        //
-            NSString *NSVideoPath = [NSString stringWithUTF8String:sURL ];
-            NSLog(@"play_remote >> %@",NSVideoPath);
+        //The video path
+            NSString *nsVideo_path = [NSString stringWithUTF8String:sVideo_path];
 
-        //
-            if( instance == nil )
-                instance = [MovieLayer alloc];
+        //Playing it
+            [[HypVideo getInstance] playRemote_video:nsVideo_path];
 
-            instance.orientation = orientation;
-            [instance open:NSVideoPath];
-    }
-
-    void dispose( ){
-        [instance close];
-        if( instance != nil )
-            instance = nil;
     }
 
 
