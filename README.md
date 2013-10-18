@@ -2,6 +2,7 @@ HypMedias
 =========
 
 Haxe NME / OpenFL extension for Media Playback
+
 Vidéo playback only for now, and soon recording, display image...
 
 HypVideo:
@@ -40,3 +41,11 @@ For android you need to add the following activity to your AndroidManifest:
 	android:screenOrientation="landscape"
 />
 ```
+
+Made at [Hyperfiction](http://hyperfiction.fr)
+--------------------
+Developed by [Johann Martinache](https://github.com/shoebox) [@shoe_box](https://twitter.com/shoe_box)
+
+License
+-------
+This work is under BSD simplified License.
