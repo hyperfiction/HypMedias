@@ -1,0 +1,10 @@
+{
+	"name": "HypMedias",
+	"url" : "https://github.com/hyperfiction/HypMedias",
+	"license": "BSD",
+	"tags": ["hyperfiction", "macro","shoebox","openfl","video","playback"],
+	"description": "Allow video playback on Android & iOS",
+	"version": "1.0.0",
+	"releasenote": "Initial release",
+	"contributors": ["shoebox"]  
+}
