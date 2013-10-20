@@ -9,14 +9,13 @@
 
 	<haxelib name="nme" />
 	<haxelib name="actuate" />
+	<haxelib name="inthebox-macros" />
 
-	<haxedef name="estat"/>
-
+	
 	<assets path="assets" rename="assets" exclude="nme.svg" />
 	<icon path="assets/nme.svg" />
 
 	<include path=".." />
-	<source path="../../inthebox/src" />
 
 	<template path="AndroidManifest.xml" rename="androidManifest.xml" if="android"/>
 

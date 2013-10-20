@@ -58,7 +58,7 @@ class TestHypVideo extends Sprite{
 				v.addEventListener( HypVideoEvent.PLAYBACK_PLAY , _onHypVideo_event );
 				v.addEventListener( HypVideoEvent.PLAYBACK_SEEK , _onHypVideo_event );
 				v.addEventListener( HypVideoEvent.PLAYBACK_STOP , _onHypVideo_event );
-				v.playRemote("http://cdn.dmcloud.net/route/http/4f1ffb14f325e171730015e0/52036a1094a6f6203000002b/mp4_h264_aac.mp4?auth=1382529503-0-yms0b1eu-4ddbfc351894899f8d0f6e0433eeddac");
+				v.playRemote("http://www.w3schools.com/html/mov_bbb.mp4");
 		}
 
 		/**

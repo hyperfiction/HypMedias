@@ -3,15 +3,18 @@
 
 	<!-- misc -->
 		<classpath name="src" />
+		
 	<!-- android -->
-	        <java path="project/android" if="android" />
-		<ndll name="hypmedias" if="android"/>
-	
-	        <template
-	        	path="/templates/android/template/res/layout/fr_hyperfiction_hypmedias_hypvideo.xml"
-	        	rename="res/layout/fr_hyperfiction_hypmedias_hypvideo.xml"
-	        	if="android"
-	        />
+        <java path="project/android" if="android" />
+		<ndll name="hypmedias" if="android"/>	
+        <template
+        	path="/templates/android/template/res/layout/fr_hyperfiction_hypmedias_hypvideo.xml"
+        	rename="res/layout/fr_hyperfiction_hypmedias_hypvideo.xml"
+        	if="android"
+        />
+
+	<!-- Android -->
+		<templatePath name="templates/" if="haxe3"/>
 
 	<!-- iOS -->
 		<ndll name="hypmedias" if="ios"/>

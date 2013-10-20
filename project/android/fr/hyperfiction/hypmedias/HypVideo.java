@@ -3,7 +3,7 @@ package fr.hyperfiction.hypmedias;
 import android.content.Intent;
 import android.util.Log;
 import fr.hyperfiction.hypmedias.HypVideoActivity;
-import fr.hyperfiction.hypmedias.EStatHypVideoActivity;
+//import fr.hyperfiction.hypmedias.EStatHypVideoActivity;
 import org.haxe.nme.GameActivity;
 
 /**
@@ -49,10 +49,10 @@ class HypVideo{
 		*
 		* @public
 		* @return	void
+		*static public void playRemoteEstat( String sVideo_url ){
+		*	_playRemote( sVideo_url , EStatHypVideoActivity.class );
+		*}
 		*/
-		static public void playRemoteEstat( String sVideo_url ){
-			_playRemote( sVideo_url , EStatHypVideoActivity.class );
-		}
 
 	// -------o protected
 
