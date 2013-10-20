@@ -8,9 +8,11 @@ Vidéo playback only for now, and soon recording, display image...
 __Install:__
 
 On haxelib ( haxe 3 ):
+```java
 haxelib install HypMedias
+```
 
-Or clone the repository and add it to yours classpath
+Or clone the repository.
 
 
 HypVideo:
