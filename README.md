@@ -5,6 +5,14 @@ Haxe NME / OpenFL extension for Media Playback
 
 Vidéo playback only for now, and soon recording, display image...
 
+__Install:__
+
+On haxelib ( haxe 3 ):
+haxelib install HypMedias
+
+Or clone the repository and add it to yours classpath
+
+
 HypVideo:
 -----------------------------
 
@@ -24,6 +32,8 @@ var v = HypVideo.getInstance( );
 	v.addEventListener( HypVideoEvent.PLAYBACK_STOP , _onHypVideo_event );
 	v.playRemote("VIDEOURL");
 ```
+
+Take a look at the "demo" folder for a ready to compile demo.
 
 __iOS setup:__
 
