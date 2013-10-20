@@ -11,6 +11,8 @@
 	<haxelib name="actuate" />
 	<haxelib name="inthebox-macros" />
 
+	<haxelib name="HypMedias"/>
+
 	
 	<assets path="assets" rename="assets" exclude="nme.svg" />
 	<icon path="assets/nme.svg" />
