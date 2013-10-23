@@ -14,6 +14,10 @@ haxelib install HypMedias
 
 Or clone the repository.
 
+You need to install ( and link it in your project.xml ) the haxelib "inthebox-macros"
+```java
+haxelib install inthebox-macros
+```
 
 HypVideo:
 -----------------------------
