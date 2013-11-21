@@ -1,7 +1,7 @@
 package fr.hyperfiction.hypmedias;
 
-import nme.events.Event;
-import nme.events.EventDispatcher;
+import flash.events.Event;
+import flash.events.EventDispatcher;
 
 /**
  * ...

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+
+	<meta title="Hypmediasdemo" package="fr.hyperfiction.hypmediasdemo" version="1.0.0" company="Hyperfiction" />
+	<app main="TestHypVideo" path="bin-debug" file="Hypmediasdemo" />
+
+	<source path="src" />
+
+	<haxelib name="openfl" />
+
+	<assets path="assets" rename="assets" exclude="openfl.svg" />
+	<icon path="assets/openfl.svg" />
+	<include path=".."/>
+
+	<android target-sdk-version="19" />
+
+</project>

@@ -2,16 +2,17 @@ package fr.hyperfiction.hypmedias;
 
 import android.content.Intent;
 import android.util.Log;
+
 import fr.hyperfiction.hypmedias.HypVideoActivity;
-import fr.hyperfiction.hypmedias.EStatHypVideoActivity;
-import org.haxe.nme.GameActivity;
+
+import org.haxe.extension.Extension;
 
 /**
  * ...
  * @author shoe[box]
  */
 
-class HypVideo{
+public class HypVideo extends Extension{
 
 	static public native void onVideoStatus( String sStatus , String sArg );
 	static{
@@ -44,16 +45,6 @@ class HypVideo{
 			_playRemote( sVideo_url , HypVideoActivity.class );
 		}
 
-		/**
-		* Play a rmeote Video by using the Estat system
-		*
-		* @public
-		* @return	void
-		*/
-		static public void playRemoteEstat( String sVideo_url ){
-			_playRemote( sVideo_url , EStatHypVideoActivity.class );
-		}
-
 	// -------o protected
 
 		/**
@@ -64,11 +55,11 @@ class HypVideo{
 		*/
 		static private void _playRemote( String sVideo_url , Class<?> c ){
 			//The arguments
-				Intent 	i = new Intent( GameActivity.getInstance( ) , c );
+				Intent 	i = new Intent( mainContext , c );
 						i.putExtra("sVideo_url", sVideo_url);
 
 			//Starting the Activity
-				GameActivity.getInstance( ).startActivity( i );
+				mainActivity.startActivity( i );
 		}
 
 	// -------o misc

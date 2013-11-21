@@ -1,10 +1,9 @@
 package fr.hyperfiction.hypmedias;
 
-import ::APP_PACKAGE::.R;
-
 import fr.hyperfiction.hypmedias.HypVideo;
-import fr.hyperfiction.hypmedias.HypVideoView;
 import fr.hyperfiction.hypmedias.HypVideoView.PlayPauseListener;
+import fr.hyperfiction.hypmedias.HypVideoView;
+import fr.hyperfiction.hypmedias.R;
 
 import android.app.Activity;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
@@ -25,8 +24,6 @@ import android.widget.VideoView;
 
 import java.io.IOException;
 import java.lang.Runnable;
-
-import org.haxe.nme.GameActivity;
 
 /**
  * ...
@@ -78,6 +75,28 @@ public class HypVideoActivity extends Activity implements OnPreparedListener , O
 
 			//Callback the superclass
 				super.onCreate( savedInstance_state );
+
+			//Full screen
+				/* Fullscreen option
+				if( android.os.Build.VERSION.SDK_INT >= 19 ) {
+	                getWindow().getDecorView().setSystemUiVisibility(
+						View.SYSTEM_UI_FLAG_FULLSCREEN |
+						View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+						View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+						View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+						View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+						View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+	                );
+	            }else if( android.os.Build.VERSION.SDK_INT >= 16 ) {
+            		getWindow().getDecorView().setSystemUiVisibility(
+						View.SYSTEM_UI_FLAG_FULLSCREEN |
+						View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+						View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+						View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+						View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+					);
+	            }
+	            */
 
 			//Content of the view
 				setContentView( R.layout.fr_hyperfiction_hypmedias_hypvideo );
@@ -248,29 +267,19 @@ public class HypVideoActivity extends Activity implements OnPreparedListener , O
 		* @return	void
 		*/
 		private void _sendStatus( final String sStatus , final String sArg ){
-
-			GLSurfaceView surface = (GLSurfaceView) GameActivity.getInstance( ).getCurrentFocus( );
-
-			//If GLSurface is null
-				if( surface == null )
-					return;
-
-			//Queueing the event
-				surface.queueEvent(
-					new Runnable() {
-						@Override
-						public void run() {
-							try{
-								HypVideo.onVideoStatus( sStatus , sArg );
-							} catch( Exception e) {
-								trace("Exception while sending status");
-								e.printStackTrace();
-							}
+			HypVideo.callbackHandler.post(
+				new Runnable() {
+					@Override
+					public void run() {
+						try{
+							HypVideo.onVideoStatus( sStatus , sArg );
+						} catch( Exception e) {
+							trace("Exception while sending status");
+							e.printStackTrace();
 						}
 					}
-				);
-
-
+				}
+			);
 		}
 
 	// -------o misc

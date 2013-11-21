@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project>
+<extension>
 
 	<!-- misc -->
 		<classpath name="src" />
-	<!-- android -->
-	        <java path="project/android" if="android" />
-		<ndll name="hypmedias" if="android"/>
-	
-	        <template
-	        	path="/templates/android/template/res/layout/fr_hyperfiction_hypmedias_hypvideo.xml"
-	        	rename="res/layout/fr_hyperfiction_hypmedias_hypvideo.xml"
-	        	if="android"
-	        />
 
-	<!-- iOS -->
-		<ndll name="hypmedias" if="ios"/>
-		<dependency name="MediaPlayer.framework" if="ios" />
+	<section unless="display">
 
-</project>
+		<!-- android -->
+			<dependency name="hyp-medias" path="dependencies/hyp-medias" if="android"/>
+			<ndll name="hypmedias" if="android"/>
+
+		<!-- iOS -->
+			<ndll name="hypmedias" if="ios"/>
+			<dependency name="MediaPlayer.framework" if="ios" />
+
+		<!-- Macros -->
+			<haxelib name="inthebox-macros"/>
+
+	</section>
+
+</extension>

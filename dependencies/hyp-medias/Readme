@@ -1,0 +1,28 @@
+Google Analytics Services Android SDK
+
+Copyright 2013 Google, Inc. All rights reserved.
+
+================================================================================
+DESCRIPTION:
+
+This SDK provides developers with the capability to use Google Analytics
+Services which includes Google Tag Manager Mobile (to do server-side rule-based
+customization of configuration variables and/or rule-based firing of tags,
+including Google Analytics tags) and Google Analytics (to track
+Android application usage).
+
+The SDK is packaged as a jar file, a /gtm directory containing files related
+to Google Tag Manager, a /ga directory containing files related to Google
+Analytics, and this file (Readme). Each directory contains a Readme.txt.
+
+================================================================================
+BUILD REQUIREMENTS:
+
+Android SDK 2.1+
+
+================================================================================
+RUNTIME REQUIREMENTS:
+
+Android SDK 2.1+
+
+version 3.01
